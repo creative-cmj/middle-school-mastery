@@ -217,9 +217,62 @@ export function buildWeekPlan(week, state) {
   }
   return plan;
 }
+export const lessonTeaching = {
+  Math: [
+    ['Order of operations','Work in this order: parentheses, exponents, multiplication/division left to right, then addition/subtraction left to right.','In 6 × 4 + 3, multiply first: 24 + 3 = 27.'],
+    ['Fractions','When fractions have the same denominator, keep the denominator and add or subtract only the numerators.','3/12 + 5/12 = 8/12.'],
+    ['Unit rates','A unit rate tells how much happens for one unit. Write the relationship as rate × number of units.','5 miles each hour for 4 hours: 5 × 4 = 20 miles.'],
+    ['Percentages','Turn a percent into a decimal by dividing by 100, then multiply by the whole amount.','25% of 60 = 0.25 × 60 = 15.'],
+    ['Two-step equations','Undo addition or subtraction first. Then undo multiplication or division. Keep both sides balanced.','4x + 3 = 19 → 4x = 16 → x = 4.'],
+    ['Slope','Slope is rise divided by run. Subtract y-values and x-values in the same order.','From (1, 2) to (3, 8): rise 6, run 2, slope 3.'],
+    ['Pythagorean theorem','For a right triangle, square both legs, add them, then take the square root to find the hypotenuse.','3² + 4² = 9 + 16 = 25, so c = 5.'],
+    ['Area of triangles','A triangle is half of a matching rectangle, so use one-half × base × perpendicular height.','Base 8 and height 5: ½ × 8 × 5 = 20 square units.'],
+    ['Exponents','An exponent is repeated multiplication, not multiplication by the exponent.','4³ = 4 × 4 × 4 = 64.'],
+    ['Percent decrease','Find the part that remains after the discount, then multiply the original amount by that decimal.','A 20% decrease means keep 80%; $50 × .80 = $40.'],
+    ['Linear equations','Substitute the given x-value into the equation, then calculate carefully with signs.','y = 3x − 2 when x = 4 gives y = 12 − 2 = 10.'],
+    ['Mean','Add every value, then divide by the total number of values.','4, 6, and 8 have mean 18 ÷ 3 = 6.']
+  ],
+  Science: [
+    ['Variables in experiments','The independent variable is what is changed. The dependent variable is what is measured. Controls are kept the same.','Change sunlight; measure plant height; keep soil, water, and plant type the same.'],
+    ['Chemical changes','A chemical change makes new substances. Look for evidence such as gas, a new solid, lasting color change, or heat/light.','Bubbles forming when two materials react can show a new gas formed.'],
+    ['Speed','Average speed is distance divided by time. Always include units.','60 meters in 3 seconds: 60 ÷ 3 = 20 m/s.'],
+    ['Newton’s laws','A force changes motion. Name the force and explain how its direction affects the object.','Friction pushes opposite a rolling skateboard, so it slows down.'],
+    ['Energy transfer','Energy changes form but is not destroyed. Track where it is stored and where it moves.','A falling object loses gravitational potential energy and gains kinetic energy.'],
+    ['Cell organelles','Each organelle has a job. Use the job to identify it instead of memorizing a picture alone.','Mitochondria release usable energy from food through cellular respiration.'],
+    ['Food webs','Arrows show energy moving from food to consumer. A change in one population can affect connected populations.','Fewer rabbits can mean less food energy for foxes.'],
+    ['Weather vs. climate','Weather is short-term conditions. Climate is the long-term pattern in a place.','Rain today is weather; usually dry summers is climate.'],
+    ['Plate tectonics','Earth’s plates move and interact at boundaries. Their movement explains many earthquakes, volcanoes, and mountains.','Plates sliding past each other can release energy as an earthquake.'],
+    ['Scientific evidence','A good claim matches the evidence without going beyond it. Explain why the data supports your claim.','Three controlled trials support a careful conclusion about those trials, not every situation.'],
+    ['Electric circuits','Current needs a complete loop. An open circuit breaks the path.','Opening a switch stops the current, so the bulb turns off.'],
+    ['Data interpretation','Describe the pattern first, then make a claim only as strong as the graph or table supports.','If two values rise together, the data shows a positive relationship.']
+  ],
+  ELA: [
+    ['Main idea','The main idea is the big point supported by several details, not one small fact.','Details about studying, reading aloud, and talks support the idea that a library serves the community.'],
+    ['Text evidence','Choose the detail that directly proves the claim. Then explain the connection in your own words.','A detail about parents reading in the children’s room supports the claim that different ages used the library.'],
+    ['Context clues','Use nearby examples, actions, and contrasts to infer an unfamiliar word’s meaning.','Checking every measurement twice shows that meticulous means very careful.'],
+    ['Sentence fragments','A complete sentence needs a subject and a complete thought, not only a phrase or dependent clause.','“The telescope revealed a comet” has a subject and a full predicate.'],
+    ['Comma usage','Use a comma after an introductory phrase before the complete sentence begins.','“Before the experiment, Maya labeled each container.”'],
+    ['Author’s purpose','Ask what the writer wants the reader to do or understand: inform, persuade, entertain, or express.','Instructions for sorting waste are meant to inform.'],
+    ['Tone','Tone is the writer’s attitude. Look at word choice and how the sentence makes the reader feel.','Words such as “we can solve this” create an encouraging tone.'],
+    ['Figurative language','Figurative language compares or gives human qualities to create an image or feeling.','“The wind whispered” is personification because wind is given a human action.'],
+    ['Thesis statements','A strong thesis makes a clear, supportable claim and previews the main reasons.','“Schools should start later because students need sleep, arrive alert, and learn more effectively.”'],
+    ['Semicolons','A semicolon can join two closely related complete sentences. Both sides must stand alone.','“The data were incomplete; the team repeated the trial.”'],
+    ['Evidence-based writing','Use a detail, explain what it shows, and connect it to your main idea.','Frame: “The detail ___ shows ___ because ___.”'],
+    ['Revision','Replace vague wording with precise, measurable details that fit the audience and purpose.','“A 12% increase in height” is stronger than “plants were kind of bigger.”']
+  ]
+};
+function lessonTemplateIndex(activity) {
+  const cleanTopic = (activity.lessonSkill || activity.topic || '').replace(/^Catch-up: /,'').replace(/^Recovery: /,'');
+  const curriculumIndex = curriculum[activity.subject].findIndex(([, topic]) => topic === cleanTopic);
+  if (curriculumIndex >= 0) return curriculumIndex % 12;
+  const teachingIndex = lessonTeaching[activity.subject].findIndex(([skill]) => skill === cleanTopic);
+  return teachingIndex >= 0 ? teachingIndex : 0;
+}
 export function lessonForActivity(activity, state) {
-  const questions=Array.from({length: 12},(_, index)=>generateQuestion(activity.subject, `${activity.id}-practice`, index));
-  return { ...activity, questions, objective:`Use ${activity.focus.split(',')[0].toLowerCase()} accurately and explain your reasoning.`, offlineTask: activity.subject==='Math' ? 'Show full work for two multi-step problems on paper.' : activity.subject==='Science' ? 'Sketch or label a diagram/model that supports one answer.' : 'Write one evidence-based paragraph in your own words.', masteryRequirement:80 };
+  const templateIndex = lessonTemplateIndex(activity);
+  const teach = lessonTeaching[activity.subject][templateIndex];
+  const questions=Array.from({length: 12},(_, questionIndex)=>generateQuestion(activity.subject, `${activity.id}-same-skill-${questionIndex}`, templateIndex));
+  return { ...activity, skill:teach[0], teach:{skill:teach[0], explanation:teach[1], example:teach[2]}, questions, objective:`Learn ${teach[0]}, practice it in varied examples, then explain your reasoning without hints.`, offlineTask: activity.subject==='Math' ? `Show full work for two more ${teach[0]} problems on paper.` : activity.subject==='Science' ? `Draw or label a model that helps explain ${teach[0]}.` : `Write one short response using the ${teach[0]} method in your own words.`, masteryRequirement:80 };
 }
 export function gradeAnswer(question, answer) {
   if(answer === undefined || answer === null || String(answer).trim()==='') return false;

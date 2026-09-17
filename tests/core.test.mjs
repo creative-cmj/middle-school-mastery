@@ -35,6 +35,9 @@ assert.equal(redistributed[3].total,90,'redistributed study day stays within the
 assert(redistributed[3].activities.some(item=>item.mode==='Redistributed catch-up'));
 const lesson=lessonForActivity(plan[0].activities[0],defaultState());
 assert.equal(lesson.questions.length,12);
+assert.equal(new Set(lesson.questions.map(question=>question.skill)).size,1,'a daily lesson must stay on one skill');
+assert.equal(lesson.skill,'Order of operations');
+assert(lesson.teach.explanation.length>30 && lesson.teach.example.length>10,'lesson must teach before practice');
 const lessonAnswers=Object.fromEntries(lesson.questions.map(q=>[q.id,q.options?q.correct:q.accepted[0]]));
 assert.equal(applyLesson(defaultState(),lesson,lessonAnswers).passed,true);
 assert.equal(weakSkills({...defaultState(),mastery:{'Math:Slope':{score:62}}}).length,1);
