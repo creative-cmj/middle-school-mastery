@@ -189,6 +189,32 @@ export function buildWeekPlan(week, state) {
     });
     plan.push({day, activities, total:activities.reduce((sum,a)=>sum+a.minutes,0), checkpoint:day===4});
   }
+  if (week > 1) {
+    // Spread one unfinished prior activity into the final study day instead of
+    // stacking a missed day’s entire workload onto a single future session.
+    const carryCandidates = [];
+    for (let priorDay = 1; priorDay <= STUDY_DAYS_PER_WEEK; priorDay++) {
+      for (const subject of SUBJECTS) {
+        const id = `w${week - 1}d${priorDay}-${subject}`;
+        if (!state?.lessons?.[id]?.passed) {
+          const [grade, topic, focus] = curriculum[subject][week - 2];
+          carryCandidates.push({ id, subject, grade, topic, focus });
+        }
+      }
+    }
+    const carry = carryCandidates[0];
+    if (carry) {
+      plan[STUDY_DAYS_PER_WEEK - 1].activities.push({
+        ...carry,
+        id: `carry-${carry.id}-w${week}`,
+        topic: `Catch-up: ${carry.topic}`,
+        focus: `Finish the key idea from a missed session: ${carry.focus}`,
+        minutes: 16,
+        mode: 'Redistributed catch-up'
+      });
+      plan[STUDY_DAYS_PER_WEEK - 1].total += 16;
+    }
+  }
   return plan;
 }
 export function lessonForActivity(activity, state) {

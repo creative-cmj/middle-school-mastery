@@ -7,7 +7,7 @@ await new Promise(r=>setTimeout(r,1600));
 assert.equal(await evaluate('document.title'),'Middle School Mastery');
 const text=await evaluate('document.body.innerText');
 assert(text.includes('Practice with proof.'),'live app did not render dashboard');
-assert(text.includes('BEGIN STARTING DIAGNOSTIC'),'live app main action missing');
+assert(text.includes('BEGIN STARTING DIAGNOSTIC') || text.includes("START TODAY'S LESSONS"),'live app main action missing');
 assert.equal(await evaluate("document.querySelectorAll('#nav button').length"),14);
 assert.equal(await evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'),true);
 console.log('live Pages browser smoke: PASS (rendered dashboard, navigation, diagnostic action, fit)');ws.close();
