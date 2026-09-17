@@ -1,0 +1,4 @@
+import {writeFile} from 'node:fs/promises';
+const target=(await fetch('http://127.0.0.1:9223/json/list').then(r=>r.json())).find(t=>t.type==='page');
+const ws=new WebSocket(target.webSocketDebuggerUrl);let i=0;const wait=new Map();ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id&&wait.has(m.id)){wait.get(m.id)(m.result);wait.delete(m.id)}};await new Promise(r=>ws.onopen=r);const send=(method,params={})=>new Promise(resolve=>{const id=++i;wait.set(id,resolve);ws.send(JSON.stringify({id,method,params}))});
+await send('Emulation.setDeviceMetricsOverride',{width:1366,height:768,deviceScaleFactor:1,mobile:false});await send('Runtime.evaluate',{expression:"location.hash='#dashboard';void 0"});await new Promise(r=>setTimeout(r,300));const image=await send('Page.captureScreenshot',{format:'png'});await writeFile('evidence-dashboard.png',Buffer.from(image.data,'base64'));await send('Emulation.clearDeviceMetricsOverride');ws.close();
