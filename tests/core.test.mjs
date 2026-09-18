@@ -34,9 +34,11 @@ assert.equal(redistributed[3].activities.length,4,'one missed activity is redist
 assert.equal(redistributed[3].total,90,'redistributed study day stays within the 60–90 minute target');
 assert(redistributed[3].activities.some(item=>item.mode==='Redistributed catch-up'));
 const lesson=lessonForActivity(plan[0].activities[0],defaultState());
+assert.equal(plan[0].activities[0].topic,'Multiplication','the first Math day must focus on multiplication, not a broad mixed unit');
 assert.equal(lesson.questions.length,12);
 assert.equal(new Set(lesson.questions.map(question=>question.skill)).size,1,'a daily lesson must stay on one skill');
-assert.equal(lesson.skill,'Order of operations');
+assert.equal(lesson.skill,'Multiplication');
+assert(new Set(lesson.questions.map(question=>question.prompt)).size >= 10,'same-skill practice must use different examples rather than copied questions');
 assert(lesson.teach.explanation.length>30 && lesson.teach.example.length>10,'lesson must teach before practice');
 const lessonAnswers=Object.fromEntries(lesson.questions.map(q=>[q.id,q.options?q.correct:q.accepted[0]]));
 assert.equal(applyLesson(defaultState(),lesson,lessonAnswers).passed,true);

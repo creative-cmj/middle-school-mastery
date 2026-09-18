@@ -99,7 +99,7 @@ function shortQuestion({ subject, skill, prompt, accepted, correct, explanation,
 }
 
 function mathQuestion(rng, index) {
-  const template = index % 12;
+  const template = index % 13;
   const a = 3 + Math.floor(rng() * 9), b = 2 + Math.floor(rng() * 8), c = 2 + Math.floor(rng() * 6);
   if (template === 0) { const ans = a * b + c; return choiceQuestion({ subject:'Math',skill:'Order of operations',prompt:`Evaluate: ${a} × ${b} + ${c}`,options:shuffle(rng,[String(ans),String((a+b)*c),String(a*(b+c)),String(a*b-c)]),correct:String(ans),explanation:`Multiply first: ${a} × ${b} = ${a*b}; then add ${c} to get ${ans}.`,practice:'Do three expressions where multiplication and addition appear together.',hint:'Which operation happens before addition?' }); }
   if (template === 1) { const ans = a + b; return choiceQuestion({ subject:'Math',skill:'Fractions',prompt:`What is ${a}/12 + ${b}/12 in simplest form?`,options:shuffle(rng,[`${ans}/12`,`${a+b}/24`,`${Math.abs(a-b)}/12`,`12/${ans}`]),correct:`${ans}/12`,explanation:'The denominators already match, so add the numerators and keep the denominator.',practice:'Add and subtract fractions with common denominators.' }); }
@@ -112,7 +112,9 @@ function mathQuestion(rng, index) {
   if (template === 8) { const n=2+Math.floor(rng()*7), exp=2+Math.floor(rng()*2), ans=n**exp; return choiceQuestion({subject:'Math',skill:'Exponents',prompt:`Evaluate ${n}<sup>${exp}</sup>.`,options:shuffle(rng,[String(ans),String(n*exp),String(n+exp),String(exp**n)]),correct:String(ans),explanation:`${n}<sup>${exp}</sup> means multiply ${n} by itself ${exp} times.`,practice:'Expand an exponent as repeated multiplication before calculating.'}); }
   if (template === 9) { const start=40+Math.floor(rng()*40), change=10+Math.floor(rng()*20), ans=start*(100-change)/100; return shortQuestion({subject:'Math',skill:'Percent decrease',prompt:`A $${start} item is discounted by ${change}%. What is its new price?`,accepted:[ans,ans.toFixed(2)],correct:`$${ans.toFixed(2)}`,explanation:`The discount is ${change}% of $${start}; multiply by ${1-change/100} to get $${ans.toFixed(2)}.`,practice:'Use original × (1 − decimal percent).'}); }
   if (template === 10) { const yint=-4+Math.floor(rng()*9), slope=1+Math.floor(rng()*5), x=2+Math.floor(rng()*5), y=slope*x+yint; return shortQuestion({subject:'Math',skill:'Linear equations',prompt:`For y = ${slope}x ${yint>=0?'+':'−'} ${Math.abs(yint)}, what is y when x = ${x}?`,accepted:[y],correct:String(y),explanation:`Substitute ${x}: y = ${slope}(${x}) ${yint>=0?'+':'−'} ${Math.abs(yint)} = ${y}.`,practice:'Substitute carefully and keep negative signs attached.'}); }
-  const values=[4,6,7,9,12]; const sorted=shuffle(rng,values); const mean=values.reduce((s,n)=>s+n,0)/values.length; return choiceQuestion({subject:'Math',skill:'Mean',prompt:`Find the mean of ${sorted.join(', ')}.`,options:shuffle(rng,[String(mean),String(7),String(12),String(4)]),correct:String(mean),explanation:`Add the values: ${values.reduce((s,n)=>s+n,0)}. Divide by ${values.length} to get ${mean}.`,practice:'Write sum ÷ number of values for every mean problem.'});
+  if (template === 11) { const values=[4,6,7,9,12]; const sorted=shuffle(rng,values); const mean=values.reduce((s,n)=>s+n,0)/values.length; return choiceQuestion({subject:'Math',skill:'Mean',prompt:`Find the mean of ${sorted.join(', ')}.`,options:shuffle(rng,[String(mean),String(7),String(12),String(4)]),correct:String(mean),explanation:`Add the values: ${values.reduce((s,n)=>s+n,0)}. Divide by ${values.length} to get ${mean}.`,practice:'Write sum ÷ number of values for every mean problem.'}); }
+  const factorA = 2 + Math.floor(rng() * 10), factorB = 3 + Math.floor(rng() * 9), product = factorA * factorB;
+  return choiceQuestion({subject:'Math',skill:'Multiplication',prompt:`Calculate ${factorA} × ${factorB}.`,options:shuffle(rng,[String(product),String(factorA+factorB),String(product+factorA),String(product-factorB)]),correct:String(product),explanation:`Break the multiplication into place-value parts or use a known fact: ${factorA} × ${factorB} = ${product}.`,practice:'Use an array, area model, or partial products to show why the factors make this product.',hint:'Estimate first: is your answer close to tens, hundreds, or more?'});
 }
 
 function scienceQuestion(rng, index) {
@@ -183,9 +185,23 @@ export function buildWeekPlan(week, state) {
   for(let day=1;day<=STUDY_DAYS_PER_WEEK;day++) {
     const subjects = day === 1 ? ['Math','Science','ELA'] : day === 2 ? ['Math','ELA','Science'] : day === 3 ? ['Science','Math','ELA'] : ['ELA','Math','Science'];
     const activities = subjects.map((subject, index) => {
-      const [grade, topic, focus] = curriculum[subject][week-1];
+      const [grade, unitTopic] = curriculum[subject][week-1];
       const weak = Object.entries(state?.mastery || {}).find(([key, value]) => key.startsWith(`${subject}:`) && value.score < 70);
-      return { id:`w${week}d${day}-${subject}`, subject, grade, topic: weak ? `${topic} + recovery: ${weak[0].split(':')[1]}` : topic, focus, minutes: index===0?30:22, mode: index===0?'Learn + practice':'Read, analyze + respond' };
+      const micro = microSkillFor(subject, week, day);
+      const recoverySkill = weak?.[0].split(':')[1];
+      const skill = recoverySkill || micro.skill;
+      return {
+        id:`w${week}d${day}-${subject}`,
+        subject,
+        grade,
+        unitTopic,
+        lessonSkill:skill,
+        lessonTemplate:recoverySkill ? undefined : micro.templateIndex,
+        topic:recoverySkill ? `Recovery: ${skill}` : skill,
+        focus:recoverySkill ? `Targeted review of ${skill} before new material.` : micro.explanation,
+        minutes: index===0?30:22,
+        mode: index===0?'Learn + practice':'Read, analyze + respond'
+      };
     });
     plan.push({day, activities, total:activities.reduce((sum,a)=>sum+a.minutes,0), checkpoint:day===4});
   }
@@ -230,7 +246,8 @@ export const lessonTeaching = {
     ['Exponents','An exponent is repeated multiplication, not multiplication by the exponent.','4³ = 4 × 4 × 4 = 64.'],
     ['Percent decrease','Find the part that remains after the discount, then multiply the original amount by that decimal.','A 20% decrease means keep 80%; $50 × .80 = $40.'],
     ['Linear equations','Substitute the given x-value into the equation, then calculate carefully with signs.','y = 3x − 2 when x = 4 gives y = 12 − 2 = 10.'],
-    ['Mean','Add every value, then divide by the total number of values.','4, 6, and 8 have mean 18 ÷ 3 = 6.']
+    ['Mean','Add every value, then divide by the total number of values.','4, 6, and 8 have mean 18 ÷ 3 = 6.'],
+    ['Multiplication','Multiply by breaking factors into place-value parts, using an array, or using a known fact and scaling it.','7 × 8 = 56; an area model can show 7 groups of 8.']
   ],
   Science: [
     ['Variables in experiments','The independent variable is what is changed. The dependent variable is what is measured. Controls are kept the same.','Change sunlight; measure plant height; keep soil, water, and plant type the same.'],
@@ -261,7 +278,19 @@ export const lessonTeaching = {
     ['Revision','Replace vague wording with precise, measurable details that fit the audience and purpose.','“A 12% increase in height” is stronger than “plants were kind of bigger.”']
   ]
 };
+const dailySkillSequence = {
+  Math: [12, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+  Science: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+  ELA: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+};
+function microSkillFor(subject, week, day) {
+  const sequence = dailySkillSequence[subject];
+  const templateIndex = sequence[((week - 1) * STUDY_DAYS_PER_WEEK + (day - 1)) % sequence.length];
+  const teach = lessonTeaching[subject][templateIndex];
+  return { templateIndex, skill: teach[0], explanation: teach[1] };
+}
 function lessonTemplateIndex(activity) {
+  if (Number.isInteger(activity.lessonTemplate)) return activity.lessonTemplate;
   const cleanTopic = (activity.lessonSkill || activity.topic || '').replace(/^Catch-up: /,'').replace(/^Recovery: /,'');
   const curriculumIndex = curriculum[activity.subject].findIndex(([, topic]) => topic === cleanTopic);
   if (curriculumIndex >= 0) return curriculumIndex % 12;
