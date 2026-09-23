@@ -1,13 +1,2 @@
-import assert from 'node:assert/strict';
-const url='https://creative-cmj.github.io/middle-school-mastery/?v=e670f08';
-const response=await fetch(`http://127.0.0.1:9223/json/new?${encodeURIComponent(url)}`,{method:'PUT'});
-const target=await response.json();
-const ws=new WebSocket(target.webSocketDebuggerUrl);let id=0;const pending=new Map();ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id&&pending.has(m.id)){pending.get(m.id)(m.result);pending.delete(m.id)}};await new Promise(r=>ws.onopen=r);const send=(method,params={})=>new Promise(resolve=>{const requestId=++id;pending.set(requestId,resolve);ws.send(JSON.stringify({id:requestId,method,params}))});const evaluate=async expression=>(await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true})).result.value;
-await new Promise(r=>setTimeout(r,1600));
-assert.equal(await evaluate('document.title'),'Middle School Mastery');
-const text=await evaluate('document.body.innerText');
-assert(text.includes('Practice with proof.'),'live app did not render dashboard');
-assert(text.includes('BEGIN STARTING DIAGNOSTIC') || text.includes("START TODAY'S LESSONS"),'live app main action missing');
-assert.equal(await evaluate("document.querySelectorAll('#nav button').length"),14);
-assert.equal(await evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'),true);
-console.log('live Pages browser smoke: PASS (rendered dashboard, navigation, diagnostic action, fit)');ws.close();
+process.env.WORKBOOK_URL ||= 'https://creative-cmj.github.io/middle-school-mastery/?v=8-1';
+await import('./workbook-browser.mjs');
