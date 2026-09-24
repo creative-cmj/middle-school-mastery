@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {mathLessons} from '../lessons/math.js';
+import {checkAnswer,repairGrading,freshProgress} from '../workbook-core.js';
+const question=mathLessons[0].guided;
+assert.equal(question.answer,'4^5');
+for(const answer of ['4^5','4 ^ 5','4^ 5','4⁵','4ˆ5','4＾5','4\u200b^5','4^(5)'])assert.equal(checkAnswer(question,answer),true,`valid power rejected: ${answer}`);
+for(const answer of ['4^6','4^2 × 4^3','45','1024','4^5 + 1','4^-5','4^0.5'])assert.equal(checkAnswer(question,answer),false,`wrong answer or requested form accepted: ${answer}`);
+assert.equal(checkAnswer({answer:'1/8',accepted:['1/8']},'0.125'),true);
+assert.equal(checkAnswer({answer:'A B',accepted:['A B'],options:['A B','AB']},'AB'),false,'choice matching must not collapse arbitrary spaces');
+const p=freshProgress();p.notebook='Keep my notes';p.guided.g={answer:'4 ^ 5',correct:false,firstCorrect:false,attempts:1};p.results.p1={answer:'2^99',correct:false,attempts:1};
+repairGrading(mathLessons[0],p);
+assert.equal(p.guided.g.correct,true);assert.equal(p.guided.g.firstCorrect,true);assert.equal(p.results.p1.correct,false);assert.equal(p.notebook,'Keep my notes');
+console.log('Exponent grading regression: PASS');

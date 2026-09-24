@@ -1,7 +1,7 @@
 import {mathLessons} from './lessons/math.js';
 import {scienceLessons} from './lessons/science.js';
 import {elaLessons} from './lessons/ela.js';
-import {STORAGE_KEY,SUBJECTS,STAGES,freshProgress,hydrate,recordAnswer,canFinish} from './workbook-core.js';
+import {STORAGE_KEY,SUBJECTS,STAGES,freshProgress,hydrate,recordAnswer,canFinish,repairGrading} from './workbook-core.js?v=8-2';
 
 const lessons=[...mathLessons,...scienceLessons,...elaLessons];
 const app=document.querySelector('#app');
@@ -12,7 +12,7 @@ let current=null,hintOpen=false,notice='';
 const esc=(s='')=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const paragraphs=items=>items.map(s=>`<p>${esc(s)}</p>`).join('');
 function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));status.textContent='Saved on this device';}catch{storageIssue='Saving is unavailable. Keep this tab open and download your work before leaving.';status.textContent='Not saved — download your work';}}
-function progress(lesson){return state.lessons[lesson.id]??(state.lessons[lesson.id]=freshProgress());}
+function progress(lesson){return repairGrading(lesson,state.lessons[lesson.id]??(state.lessons[lesson.id]=freshProgress()));}
 function go(hash){if(location.hash===hash)route();else location.hash=hash;}
 function route(){
  const id=decodeURIComponent(location.hash.slice(1));

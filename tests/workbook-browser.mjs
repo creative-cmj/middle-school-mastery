@@ -57,8 +57,12 @@ try{
   await click('[data-action="advance"]');
   assert((await text()).includes('Let’s do one together'));
   assert.equal(await evaluate(`document.querySelector('[data-action="question-next"]').disabled`),true);
-  const answer=async(q,value)=>{await evaluate(`(()=>{const form=document.querySelector('#answer-form');const inputs=[...form.querySelectorAll('input')];const el=inputs.find(x=>x.type==='radio'&&x.value===${JSON.stringify(value)})||inputs.find(x=>x.type==='text');if(!el)throw Error('answer input missing');if(el.type==='radio')el.checked=true;else el.value=${JSON.stringify(value)};el.dispatchEvent(new Event('input',{bubbles:true}));form.requestSubmit();})()`);};
-  await answer(lesson.guided,lesson.guided.answer);
+  const answer=async(q,value)=>{
+   if(q.options)await evaluate(`(()=>{const el=[...document.querySelectorAll('#answer-form input')].find(x=>x.value===${JSON.stringify(value)});if(!el)throw Error('answer input missing');el.click();})()`);
+   else {await evaluate(`(()=>{const el=document.querySelector('#answer');el.focus();el.select();})()`);await send('Input.insertText',{text:value});}
+   await click('#answer-form button[type="submit"]');
+  };
+  await answer(lesson.guided,lesson.id==='math-exponent-products'?'4 ^ 5':lesson.guided.answer);
   assert((await text()).includes('That’s right.'),`${lesson.id} guided answer rejected`);
   await click('[data-action="question-next"]');
   for(let i=0;i<lesson.practice.length;i++){
