@@ -1,2 +1,2 @@
-// The public entrypoint now serves the grade-8 workbook, not the legacy dashboard.
-await import('./workbook-browser.mjs');
+// The public entrypoint serves the full Grade 8 weekday learning program.
+await import('./year-browser.mjs');

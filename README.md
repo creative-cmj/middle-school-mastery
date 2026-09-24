@@ -1,30 +1,42 @@
-# My 8th Grade Workbook
+# My 8th Grade Learning Program
 
-A focused, original grade-8 workbook replacing the former grades-6–8 dashboard. The public URL stays the same. No mandatory diagnostic, calendar, XP, streaks, or mastery dashboard.
+A browser-local Grade 8 learning program for **every Monday through Friday from September 24, 2026 through June 11, 2027**. It contains a daily plan for Math, Science, Language Arts, and U.S. History/Civics/Geography. It uses original material and is not affiliated with or copied from Spectrum.
 
-## Learning flow
+## Full school-year plan
 
-Choose **Math**, **Science**, or **Language Arts**, then open a lesson:
+- **187 scheduled weekdays**; Saturdays and Sundays are voluntary catch-up/review time.
+- **676 regular lessons**: 169 in each subject.
+- **18 biweekly assessments**, each with four subject sections.
+- **13,520 regular lesson questions**: 20 per lesson, in a Foundation → Normal → Intermediate → Application → Challenge progression.
+- **1,152 assessment questions**: 16 new questions in each subject section, separate from regular practice prompts.
+- **14,672 total automatically checkable questions** across lesson practice and assessments.
 
-1. **Learn** — several explanatory paragraphs about one skill.
-2. **Examples** — two fully worked examples with the reasoning at each step.
-3. **Together** — a scaffolded problem, hint, checking, and worked-solution support.
-4. **Practice** — six different questions about the same skill, one at a time. Incorrect answers get a helpful hint; learners can retry or explicitly review the worked solution.
-5. **Wrap up** — an original written explanation and a transparent self-check rubric.
+Every regular lesson includes objectives, a prerequisite review, three teaching paragraphs, vocabulary, two worked examples, common mistakes, 20 questions, immediate answer explanations, and a self-check writing wrap-up. Assessment answers remain hidden until submission.
 
-First-try answers, corrected answers, and reviewed solutions are separate. Reviewing an answer never counts as independently correct. Written work is self-checked, not scored by keyword. Completing a lesson does not imply verified mastery.
+## How daily learning works
 
-## Scope
+1. Open **Today** for the four subject cards and the `0/20`-style question counts.
+2. Open a card. Teaching, vocabulary, worked examples, and common mistakes appear **before** practice.
+3. Complete the 20-question practice. Feedback and explanations appear after each answer.
+4. A biweekly assessment replaces regular lessons after every ten school weekdays. It has Math, Science, ELA, and History sections; answers are graded only when submitted.
+5. Use **Calendar** to view any planned weekday and **Progress** to see saved question evidence and skills needing review.
 
-26 lessons: 10 Math, 8 Science, 8 Language Arts. This is a focused workbook collection, not a complete year's accredited curriculum or a copy of Spectrum. Science sequencing varies by school. All passages, examples, and lessons are original. Lessons live in `lessons/` and are explicit authored content, not randomized repeated prompts.
+Missed sessions enter a separate catch-up list. The normal next weekday stays at four sessions rather than turning into an overloaded make-up day.
 
-## Data preservation
+## Curriculum progression
 
-`grade8-workbook.v1` stores the new workbook state locally: stage, current question, drafts, feedback history, notebook writing, checklist, and completion. The old `middle-school-mastery.v1` key is never overwritten or cleared. Download all saved work under **Saved work & backup** on the contents screen. There is no cross-device sync or automatic import feature.
+- **Math:** focused 6th/7th prerequisite repair, rational numbers and exponents, algebraic expressions and equations, functions and systems, geometry/transformations, data/probability, and an Algebra I bridge.
+- **Science:** evidence and measurement foundations, matter/life/Earth prerequisite repair, physical science, Earth and space systems, and controlled-experiment reasoning.
+- **ELA:** targeted sentence/reading repair, close reading, language, analytical and argument writing, research, media literacy, and a Grade 9 bridge.
+- **History:** source/map/civics foundations, Indigenous North America, colonization, Revolution/founding, expansion, Civil War/Reconstruction, industrialization, world conflicts, civil rights, and current civic participation.
 
-Legacy `app.js`, `app-core.js`, and `styles.css` remain as historical source and are not loaded by the new entrypoint. `tests/core.test.mjs` exercises that legacy logic only; it is not evidence for the new workbook.
+## Local data and preservation
 
-## Run
+Current program data is stored only in this browser under `middle-school-year.v2`. It saves answers, lesson stages/completion, catch-up work, skill evidence, and assessment results. Earlier records under `grade8-workbook.v1` and `middle-school-mastery.v1` are **never modified or erased**.
+
+There is no account or cross-device sync yet; use the same browser and device for continuity.
+
+## Run locally
 
 ```bash
 python3 -m http.server 9877 --bind 127.0.0.1
@@ -35,16 +47,12 @@ Open `http://127.0.0.1:9877/`.
 ## Verify
 
 ```bash
+node tests/year-core.test.mjs
+node tests/year-program.test.mjs
+node tests/year-content-audit.test.mjs
+node tests/year-browser.mjs
 node tests/workbook-core.test.mjs
-node tests/workbook-entry.test.mjs
-node tests/workbook-content.test.mjs
-node tests/workbook-browser.mjs
+node tests/exponent-answer.test.mjs
 ```
 
-The browser test starts an isolated Chrome profile and a temporary local HTTP server, exercises all lesson flows, captures screenshots, checks desktop/mobile fit and browser errors, and shuts both down. It never uses the user's browser profile. Set `CHROME_PATH` if Chrome is not at the standard Windows location. Node 22+ is needed for the built-in WebSocket API.
-
-For a deployed verification:
-
-```bash
-WORKBOOK_URL='https://creative-cmj.github.io/middle-school-mastery/?v=8-1' node tests/workbook-browser.mjs
-```
+The year-content audit verifies every regular lesson count, 20-question difficulty distribution, unique question prompts, one valid answer option, new assessment prompts, and teaching text. The browser test verifies the live teach-first flow at desktop/mobile-safe dimensions using an isolated Chrome profile.
