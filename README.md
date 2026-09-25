@@ -28,7 +28,7 @@ Missed sessions enter a separate catch-up list. The normal next weekday stays at
 - **Math:** focused 6th/7th prerequisite repair, rational numbers and exponents, algebraic expressions and equations, functions and systems, geometry/transformations, data/probability, and an Algebra I bridge.
 - **Science:** evidence and measurement foundations, matter/life/Earth prerequisite repair, physical science, Earth and space systems, and controlled-experiment reasoning.
 - **ELA:** targeted sentence/reading repair, close reading, language, analytical and argument writing, research, media literacy, and a Grade 9 bridge.
-- **History:** source/map/civics foundations, Indigenous North America, colonization, Revolution/founding, expansion, Civil War/Reconstruction, industrialization, world conflicts, civil rights, and current civic participation.
+- **History:** Michigan-style Grade 8 U.S. history and civics: source/map foundations, Indigenous North America and colonization as context, Revolution/founding, early republic and expansion, sectionalism/reform, Civil War, Reconstruction, and U.S.-history-to-1877 civic/economic/geographic synthesis. District history scope varies, so every History lesson shows its alignment label.
 
 ## Local data and preservation
 

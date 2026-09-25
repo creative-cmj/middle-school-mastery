@@ -2,6 +2,7 @@ import {mathSequence} from './content/math-sequence.js';
 import {scienceSequence} from './content/science-sequence.js';
 import {elaSequence} from './content/ela-sequence.js';
 import {historySequence} from './content/history-sequence.js';
+import {standardsForLesson} from './content/standards-framework.js';
 
 export const SCHOOL_START='2026-09-24';
 export const SCHOOL_END='2027-06-11';
@@ -57,7 +58,7 @@ function question(seed,subject,lessonId,index,{assessment=false}={}){
 function makeLesson(subject,date,sessionIndex){
  const seed=sequences[subject][sessionIndex];
  const id=`${slug(subject)}-${date}`;
- return {...seed,id,date,subject,grade:grades[subject],lessonNumber:sessionIndex+1,objectives:[seed.objective,`Use ${seed.vocabulary[0]} and ${seed.vocabulary[1]} to justify a result or claim.`],commonMistakes:[`Using ${seed.vocabulary[0]} as a label without connecting it to evidence or steps.`,`Skipping the check that connects ${seed.vocabulary[1]} to the stated objective.`],estimatedMinutes:45,questions:Array.from({length:20},(_,i)=>question(seed,subject,id,i)),notebook:{prompt:`In 3–5 sentences, explain how you would use ${seed.vocabulary[0]} and ${seed.vocabulary[1]} to meet today’s objective. Include one step from a worked example.`,checklist:['I used at least two lesson vocabulary words.','I named a specific step, detail, calculation, or piece of evidence.','I explained why my conclusion or answer fits the lesson.'],sample:`A strong response names ${seed.vocabulary[0]}, connects it to ${seed.vocabulary[1]}, and explains how the method supports: ${seed.objective}`}};
+ return {...seed,id,date,subject,grade:grades[subject],lessonNumber:sessionIndex+1,standards:standardsForLesson(subject,seed),objectives:[seed.objective,`Use ${seed.vocabulary[0]} and ${seed.vocabulary[1]} to justify a result or claim.`],commonMistakes:[`Using ${seed.vocabulary[0]} as a label without connecting it to evidence or steps.`,`Skipping the check that connects ${seed.vocabulary[1]} to the stated objective.`],estimatedMinutes:45,questions:Array.from({length:20},(_,i)=>question(seed,subject,id,i)),notebook:{prompt:`In 3–5 sentences, explain how you would use ${seed.vocabulary[0]} and ${seed.vocabulary[1]} to meet today’s objective. Include one step from a worked example.`,checklist:['I used at least two lesson vocabulary words.','I named a specific step, detail, calculation, or piece of evidence.','I explained why my conclusion or answer fits the lesson.'],sample:`A strong response names ${seed.vocabulary[0]}, connects it to ${seed.vocabulary[1]}, and explains how the method supports: ${seed.objective}`}};
 }
 function makeAssessment(date,assessmentNumber,regularCompleted){
  const start=Math.max(0,regularCompleted-10);

@@ -21,6 +21,7 @@ try{
  await evaluate('document.querySelector("[data-session-open]").click()');await until('!!document.querySelector("[data-year-lesson]")');
  assert.equal(await evaluate('!!document.querySelector("[data-year-practice]")'),false,'questions must stay hidden while learning content is shown');
  assert((await evaluate('document.body.innerText')).includes('Worked examples'));
+ assert((await evaluate('document.body.innerText')).includes('Standards focus'));
  await evaluate('document.querySelector("[data-start-practice]").click()');await until('!!document.querySelector("[data-year-practice]")');
  assert((await evaluate('document.body.innerText')).includes('Question 1 of 20'));
  assert.equal(await evaluate('document.querySelectorAll("[data-answer-option]").length'),4);

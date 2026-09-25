@@ -189,6 +189,64 @@ const rows = outline.trim().split('\n').filter(Boolean).map((line) => {
   return { unit, title, objective, review, skillTag, vocabulary: vocabulary.split('|') };
 });
 
+const grade8ExtensionOutline = `
+Constitution in Practice\tApplying the First Amendment\tApply a First Amendment protection to a realistic civic situation.\tConnect individual liberties to constitutional limits.\tconstitutional application\tpetition|speech|religion
+Constitution in Practice\tDue Process in a Civic Scenario\tExplain why government procedures must protect due process.\tReview the Bill of Rights and rule of law.\tcivic reasoning\tdue process|hearing|liberty
+Constitution in Practice\tFederal and State Powers in Conflict\tClassify a public issue as federal, state, shared, or local.\tReview federalism and delegated powers.\tfederalism application\tdelegated|reserved|concurrent
+Constitution in Practice\tChecks and Balances Case Study\tTrace how one branch can check another in a constitutional dispute.\tReview separation of powers.\tgovernment analysis\tveto|override|judicial review
+Constitution in Practice\tInterpreting the Preamble\tConnect a Preamble goal to a government action.\tReview the purposes of constitutional government.\tfounding document analysis\tjustice|welfare|union
+Constitution in Practice\tComparing Articles and Constitution\tExplain how the Constitution addressed a weakness in the Articles.\tReview problems of weak national power.\tconstitutional comparison\tconfederation|ratify|republic
+Constitution in Practice\tThe Amendment Process\tExplain how an amendment can change the Constitution.\tReview popular sovereignty and federalism.\tconstitutional process\tamendment|proposal|ratification
+Constitution in Practice\tRights and Responsibilities in School\tDistinguish a protected right from a responsibility in a community setting.\tReview civic participation.\tcivic application\tright|responsibility|community
+Constitution in Practice\tEvaluating a Civic Claim\tUse constitutional evidence to evaluate a claim about government power.\tReview claim and evidence reasoning.\tcivic evidence\tclaim|evidence|constitution
+Constitution in Practice\tFounding Principles Synthesis\tExplain how natural rights, consent, and limited government connect.\tReview Declaration and Constitution principles.\tprinciples synthesis\tnatural rights|consent|limited government
+Early Republic and Expansion\tWashington and Neutrality\tExplain why Washington urged neutrality in foreign conflicts.\tReview national interests and executive leadership.\tforeign policy reasoning\tneutrality|precedent|cabinet
+Early Republic and Expansion\tHamilton and Jefferson Compared\tCompare competing visions of the early national economy.\tReview federal power and regional interests.\tpolitical comparison\tbank|tariff|agrarian
+Early Republic and Expansion\tLouisiana Purchase Constitutional Debate\tAnalyze why the Louisiana Purchase raised constitutional questions.\tReview strict and loose interpretation.\tconstitutional debate\tpurchase|interpretation|territory
+Early Republic and Expansion\tLewis and Clark Geographic Evidence\tUse geographic evidence to explain challenges of western exploration.\tReview map scale and route analysis.\thistorical geography\texpedition|watershed|mapping
+Early Republic and Expansion\tWar of 1812 Cause-and-Effect\tBuild a multi-cause explanation for the War of 1812.\tReview maritime conflict and western expansion.\tcausal reasoning\timpressment|embargo|nationalism
+Early Republic and Expansion\tMarshall Court and National Power\tExplain how a Supreme Court decision affected national authority.\tReview judicial review.\tconstitutional analysis\tprecedent|commerce|Supreme Court
+Early Republic and Expansion\tMonroe Doctrine and Foreign Policy\tExplain the purpose and limits of the Monroe Doctrine.\tReview national security and diplomacy.\tforeign policy\tdoctrine|hemisphere|intervention
+Early Republic and Expansion\tCanals and Regional Markets\tExplain how roads, canals, and railroads changed markets.\tReview distance, trade, and economic interdependence.\teconomic geography\tcanal|railroad|market
+Early Republic and Expansion\tIndustrialization and Labor\tDescribe how factory work changed labor and family life.\tReview supply, demand, and technology.\teconomic change\tfactory|wage|division of labor
+Early Republic and Expansion\tImmigration Before the Civil War\tExplain push-pull factors affecting antebellum immigration.\tReview migration and urban growth.\tmigration analysis\tpush factor|pull factor|nativism
+Sectionalism and Reform\tRegional Economies Before the Civil War\tCompare economic systems in the North, South, and West.\tReview resources, labor, and trade.\tregional comparison\tplantation|industry|cash crop
+Sectionalism and Reform\tCotton and Enslavement\tExplain how cotton expansion strengthened slavery and sectional conflict.\tReview forced labor and export economies.\teconomic causation\tcotton gin|enslavement|export
+Sectionalism and Reform\tAbolitionist Source Analysis\tAnalyze how abolitionists used moral and constitutional arguments.\tReview claims, evidence, and audience.\targument analysis\tabolition|emancipation|petition
+Sectionalism and Reform\tDeclaration of Sentiments\tExplain why reformers connected equality to political participation.\tReview rights and civic action.\treform analysis\tSeneca Falls|suffrage|declaration
+Sectionalism and Reform\tReform Movements and Social Change\tCompare goals and methods of antebellum reform movements.\tReview collective action and public policy.\tcomparative reasoning\treform|temperance|asylum
+Sectionalism and Reform\tMissouri Compromise Map\tUse a map to explain the Missouri Compromise.\tReview latitude, territory, and slavery expansion.\tmap reasoning\tcompromise|latitude|territory
+Sectionalism and Reform\tNullification and State Power\tExplain why nullification raised a federalism conflict.\tReview delegated and reserved powers.\tfederalism conflict\tnullification|tariff|union
+Sectionalism and Reform\tIndian Removal and Sovereignty\tAnalyze how removal policy affected Native nations and U.S. expansion.\tReview treaties and tribal sovereignty.\tpolicy analysis\tremoval|sovereignty|treaty
+Sectionalism and Reform\tMexican-American War and Expansion\tExplain how war and territorial gain increased sectional tension.\tReview manifest destiny and boundaries.\twar consequences\tannexation|cession|boundary
+Sectionalism and Reform\tFugitive Slave Act and Resistance\tExplain why the Compromise of 1850 delayed but did not solve conflict.\tReview sectional interests.\tcompromise analysis\tfugitive slave act|popular sovereignty|sectionalism
+Civil War\tKansas-Nebraska Act and Popular Sovereignty\tExplain why popular sovereignty intensified conflict in Kansas.\tReview territorial voting and compromise.\tcausal analysis\tpopular sovereignty|territory|violence
+Civil War\tDred Scott Constitutional Arguments\tExplain how Dred Scott affected citizenship and slavery debates.\tReview judicial power and constitutional interpretation.\tlandmark case\tcitizenship|property|Supreme Court
+Civil War\tLincoln-Douglas Debate Evidence\tCompare arguments about slavery, union, and popular sovereignty.\tReview claim, counterclaim, and evidence.\targument comparison\tdebate|union|sovereignty
+Civil War\tElection of 1860 and Secession\tExplain why the 1860 election led Southern states to secede.\tReview sectional political conflict.\tpolitical causation\tsecession|Republican Party|union
+Civil War\tAnaconda Plan and Resources\tUse maps and resources to explain Union and Confederate strategies.\tReview rivers, railroads, and supply lines.\tmilitary geography\tblockade|railroad|supply line
+Civil War\tEmancipation and Foreign Diplomacy\tExplain how emancipation changed the meaning and goals of the war.\tReview executive power and slavery.\tpolicy consequences\temancipation|proclamation|freedom
+Civil War\tBlack Soldiers and Union Victory\tExplain how Black military service affected the Union war effort.\tReview citizenship and sacrifice.\thistorical evidence\tregiment|enlistment|citizenship
+Civil War\tGettysburg and Turning Points\tExplain why Gettysburg is considered a turning point.\tReview cause, consequence, and military strategy.\tturning-point analysis\tGettysburg|casualty|turning point
+Civil War\tGettysburg Address and Democratic Ideals\tAnalyze how Lincoln connected the war to equality and democracy.\tReview founding principles.\tprimary source analysis\tdedication|equality|democracy
+Civil War\tReunification After Appomattox\tExplain what changed when Confederate armies surrendered.\tReview military and political consequences.\tconsequence analysis\tsurrender|Appomattox|reunification
+Reconstruction and Synthesis\tReconstruction Plans Compared\tCompare presidential and congressional plans for Reconstruction.\tReview postwar goals and federal power.\tpolicy comparison\tReconstruction|readmission|freedpeople
+Reconstruction and Synthesis\tEnding Slavery Through the Thirteenth\tExplain how the Thirteenth Amendment changed the Constitution.\tReview abolition and amendment process.\tconstitutional change\tabolition|amendment|involuntary servitude
+Reconstruction and Synthesis\tEqual Protection After the Fourteenth\tExplain how equal protection and citizenship changed constitutional meaning.\tReview due process and civil rights.\tconstitutional analysis\tcitizenship|equal protection|due process
+Reconstruction and Synthesis\tVoting Rights Under the Fifteenth\tExplain the purpose and limits of the Fifteenth Amendment.\tReview voting rights and enforcement.\tvoting rights\tsuffrage|amendment|enforcement
+Reconstruction and Synthesis\tFreedmen's Bureau Evidence\tUse evidence to evaluate the goals and limits of the Freedmen's Bureau.\tReview federal aid and reconstruction.\tevidence evaluation\tFreedmen's Bureau|education|labor contract
+Reconstruction and Synthesis\tReconstruction Legislatures and Representation\tExplain why Black political participation mattered after the Civil War.\tReview citizenship and representation.\tcivic history\trepresentation|legislature|officeholder
+Reconstruction and Synthesis\tCrop Lien System and Debt\tExplain how sharecropping shaped economic freedom after emancipation.\tReview land, labor, and contracts.\teconomic analysis\tsharecropping|debt|crop lien
+Reconstruction and Synthesis\tEnforcement Acts and Political Violence\tAnalyze how violence limited Reconstruction rights and participation.\tReview equal protection and enforcement.\tcivil rights analysis\tterrorism|intimidation|rights
+Reconstruction and Synthesis\tElection of 1876 and Reconstruction's End\tExplain how the Compromise of 1877 changed federal Reconstruction policy.\tReview contested elections and federal power.\tpolitical consequence\tcompromise|troops|Reconstruction
+Reconstruction and Synthesis\tEvaluating Reconstruction’s Constitutional Legacy\tEvaluate gains and limits of Reconstruction using constitutional evidence.\tReview amendments, rights, and enforcement.\thistorical evaluation\tlegacy|rights|enforcement
+Reconstruction and Synthesis\tU.S. History to 1877 Timeline Synthesis\tUse chronology to connect major turning points from Revolution through Reconstruction.\tReview sequence, cause, and consequence.\tchronological synthesis\tturning point|chronology|causation
+Reconstruction and Synthesis\tCivics, Economics, and Geography Synthesis\tApply civic, economic, and geographic reasoning to a U.S. history case.\tReview evidence-based historical explanation.\tinterdisciplinary synthesis\tcivics|economics|geography
+Reconstruction and Synthesis\tGrade 8 U.S. History Evidence Project\tBuild a claim about change and continuity from 1763 through Reconstruction.\tReview sourcing, corroboration, and historical argument.\tcumulative inquiry\tcontinuity|change|corroboration
+`;
+const grade8ExtensionRows=grade8ExtensionOutline.trim().split('\n').filter(Boolean).map(line=>{const [unit,title,objective,review,skillTag,vocabulary]=line.split('\t');return {unit,title,objective,review,skillTag,vocabulary:vocabulary.split('|')}});
+const curriculumRows=[...rows.slice(0,116),...grade8ExtensionRows];
+
 function makeExplanation({ unit, title, objective, review, skillTag, vocabulary }) {
   const [term1, term2, term3] = vocabulary;
   return [
@@ -224,13 +282,13 @@ function makeExamples({ title, objective, review, skillTag, vocabulary }) {
   ];
 }
 
-export const historySequence = rows.map((lesson, index) => ({
+export const historySequence = curriculumRows.map((lesson, index) => ({
   unit: lesson.unit,
   title: lesson.title,
   objective: lesson.objective,
   review: lesson.review,
   skillTags: [lesson.skillTag],
-  prerequisites: rows.slice(index - 1, index).map((priorLesson) => priorLesson.title),
+  prerequisites: curriculumRows.slice(index - 1, index).map((priorLesson) => priorLesson.title),
   vocabulary: lesson.vocabulary,
   explanation: makeExplanation(lesson),
   examples: makeExamples(lesson)
